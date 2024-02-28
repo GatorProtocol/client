@@ -1,0 +1,8 @@
+[
+	{
+		"id": "9",
+		"provider": "https://polygon-mumbai.g.alchemy.com/v2/JhI8C-OtZFzn6rd8p9zDrdtUjLO8Z4Jm",
+		"boost": "2",
+		"errorcallback": "restart"
+	}
+]
