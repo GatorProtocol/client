@@ -35,7 +35,7 @@ class Node:
             for event in listener.get_new_entries():
                 if int(event["args"]["model"]) == self.id:
                     print("------------------------------\n")
-                    print("   - Request ID:     " + str(event["args"]["requestId"]))
+                    print("   Request:     " + str(event["args"]["requestId"]))
                     print("   - Origin:         " + str(event["args"]["origin"]))
                     print("   - Confirmations:  " + str(event["args"]["confirmations"]))
                     print("   - Bid:            " + str(event["args"]["bid"]))
