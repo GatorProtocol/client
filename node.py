@@ -51,14 +51,14 @@ class Node:
                     nonce = self.provider.eth.get_transaction_count(self.public_key)
 
                     gasEstimate = function.estimate_gas({'from': self.public_key})
-                    gasPrice = self.provider.eth.generate_gas_price()  # Using the generate_gas_price() method for a more current gas price estimate
-                    if gasPrice is None:  # In case the network does not provide a gas price, fall back to the previous strategy
+                    gasPrice = self.provider.eth.generate_gas_price()
+                    if gasPrice is None:
                         gasPrice = self.provider.eth.gas_price * 10
 
                     estimated_gas_cost = gasEstimate * gasPrice
                     balance = self.provider.eth.get_balance(self.public_key)
                     if balance < estimated_gas_cost:
-                        print(f"Insufficient funds: Have {balance}, need {estimated_gas_cost}")
+                        print(f"\n   ERROR: insufficient funds\n     Have {balance}, need {estimated_gas_cost}")
                     else:
                         txn_dict = function.build_transaction({
                             'gas': int(gasEstimate * 5 * self.boost),
