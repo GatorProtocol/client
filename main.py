@@ -4,21 +4,13 @@ import os
 import json
 
 from node import Node
+from events import EventsHandler
 
-from errorcallbacks import restart, stop
+from errorcallbacks import restart
 
-tasks = json.loads(open("tasks.json", "r").read())
-for task in tasks:
-    if task["errorcallback"] == "restart":
-        errorcallback = restart
-    else:
-        errorcallback = stop
+events_handler = EventsHandler()
+events_handler_thread = threading.Thread(target=events_handler.start)
+events_handler_thread.start()
 
-    node = Node(
-        id=int(task["id"]),
-        provider=task["provider"],
-        boost=float(task["boost"]),
-        errorcallback=errorcallback,
-        env=os.environ
-    )
-    threading.Thread(target=node.start).start()
+node = Node(models=[12, 14, 16])
+node.start()
