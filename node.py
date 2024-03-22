@@ -16,7 +16,7 @@ from web3 import Web3
 load_dotenv()
 
 class Node:
-    def __init__(self, models=[], boost=1, provider_type="http"):
+    def __init__(self, models=[], threads=64, boost=1, provider_type="http"):
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
         
         self.boost = boost
@@ -38,6 +38,8 @@ class Node:
 
         self.requests_lock = Lock()
 
+        self.total_threads = threads
+
     def infer(self, id, prompt, entropy):
         module = importlib.import_module("models." + str(id))
         return module.infer(id, prompt, entropy)
@@ -46,12 +48,14 @@ class Node:
         contract = self.provider.eth.contract(address=self.contract_address, abi=self.contract_abi)
         listener = contract.events.RequestCreated.create_filter(fromBlock='latest')
 
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        if retries == 0: logging.info("BOOTNG")
+
+        with ThreadPoolExecutor(max_workers=self.total_threads) as executor:
             while True:
-                time.sleep(1)
+                time.sleep(0.5)
                 try:
                     events = listener.get_all_entries()
-                except ValueError:
+                except:
                     logging.info("Retrying: %s", str(retries))
                     retries += 1
                     self.start(retries=retries)
