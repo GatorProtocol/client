@@ -75,7 +75,7 @@ class Node:
                     if not self.is_known(request_id_hex):
                         start_time = time.time()
 
-                        logging.info("Handling request - Model: %s, Prompt: %s", event["args"]["modelId"], event["args"]["prompt"])
+                        logging.info("HANDLING   - Model: %s, Prompt: %s", event["args"]["modelId"], event["args"]["prompt"])
 
                         result = self.infer(int(event["args"]["modelId"]), str(event["args"]["prompt"]), int(event["args"]["entropy"]))
 
@@ -96,7 +96,7 @@ class Node:
                         signed_txn = self.provider.eth.account.sign_transaction(txn_dict, private_key=self.private_key)
                         
                         tx = self.provider.eth.send_raw_transaction(signed_txn.rawTransaction)
-                        logging.info("Request fulfilled successfully - TX: %s", tx.hex())
+                        logging.info("SUCCESS    - TX: %s", tx.hex())
 
                         self.know(str(event["args"]["requestId"].hex()))
 
